@@ -19,7 +19,7 @@ def add_intercept(x):
     return new_x
 
 
-def plot(x,y,theta,save_path = None,correction = 1.0):
+def plot(x,y,theta= None,theta2 = None,save_path = None,legend1= None,legend2 = None,title = None,correction = 1.0):
     """Plot dataset and fitted logistic regression parameters.
     Args:
         x: Matrix of training examples, one per row.
@@ -42,12 +42,26 @@ def plot(x,y,theta,save_path = None,correction = 1.0):
     margin2  = (max(x[:, -1]) - min(x[:, -1])) * 0.2
     x1 = np.arange(min(x[:, -2]) - margin1, max(x[:, -2]) + margin1, 0.01)
     x2 = -(theta[0] / theta[2] + theta[1] / theta[2] * x1)
-    plt.plot(x1, x2, c='red', linewidth = 2)
+    plt.plot(x1, x2, c='red',label = legend1, linewidth = 2)
     plt.xlim([min(x[:, -2]) - margin1, max(x[:, -2]) + margin1])
     plt.ylim([min(x[:, -1]) - margin2, max(x[:, -1]) + margin2])
 
+    if theta2 is not None:
+        margin1 = (max(x[:, -2]) - min(x[:, -2])) * 0.2
+        margin2  = (max(x[:, -1]) - min(x[:, -1])) * 0.2
+        x1 = np.arange(min(x[:, -2]) - margin1, max(x[:, -2]) + margin1, 0.01)
+        x2 = -(theta[0] / theta[2] + theta[1] / theta[2] * x1)
+        plt.plot(x1, x2, c='black',label = legend2, linewidth = 2)
+        plt.xlim([min(x[:, -2]) - margin1, max(x[:, -2]) + margin1])
+        plt.ylim([min(x[:, -1]) - margin2, max(x[:, -1]) + margin2])
+    
+
     plt.xlabel('x1')
     plt.ylabel('x2')
+    if legend1 is not None or legend2 is not None:
+        plt.legend(loc="upper left")
+    if title is not None:
+        plt.suptitle(title, fontsize=12)
     if save_path is not None:
         plt.savefig(save_path)
     plt.show()
